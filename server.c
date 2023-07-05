@@ -42,10 +42,10 @@ addHelloWorldMethod(UA_Server *server) {
     helloAttr.displayName = UA_LOCALIZEDTEXT("en-US","Hello World");
     helloAttr.executable = true;
     helloAttr.userExecutable = true;
-    UA_Server_addMethodNode(server, UA_NODEID_NUMERIC(1,62541),
+    UA_Server_addMethodNode(server, UA_NODEID_NUMERIC(2,62541),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
-                            UA_QUALIFIEDNAME(1, "hello world"),
+                            UA_QUALIFIEDNAME(2, "hello world"),
                             helloAttr, &helloWorldMethodCallback,
                             1, &inputArgument, 1, &outputArgument, NULL, NULL);
 }
@@ -110,10 +110,10 @@ addIncInt32ArrayMethod(UA_Server *server) {
     incAttr.displayName = UA_LOCALIZEDTEXT("en-US", "IncInt32ArrayValues");
     incAttr.executable = true;
     incAttr.userExecutable = true;
-    UA_Server_addMethodNode(server, UA_NODEID_STRING(1, "IncInt32ArrayValues"),
+    UA_Server_addMethodNode(server, UA_NODEID_STRING(2, "IncInt32ArrayValues"),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER),
                             UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
-                            UA_QUALIFIEDNAME(1, "IncInt32ArrayValues"),
+                            UA_QUALIFIEDNAME(2, "IncInt32ArrayValues"),
                             incAttr, &IncInt32ArrayMethodCallback,
                             2, inputArguments, 1, &outputArgument,
                             NULL, NULL);
@@ -125,13 +125,13 @@ int main(void) {
     UA_ServerConfig *config = UA_Server_getConfig(server);
 
     UA_String customServerUrls[1];
-    customServerUrls[0] = UA_STRING("opc.tcp://192.168.12.17:4845");
+    customServerUrls[0] = UA_STRING("opc.tcp://192.168.12.17:4845/server");
     size_t customServerUrlsSize = 1;
 
     config->serverUrls = customServerUrls;
     config->serverUrlsSize = customServerUrlsSize;
     config->applicationDescription.applicationName = UA_LOCALIZEDTEXT_ALLOC("en", "Example for Medium");
-    
+    UA_Server_addNamespace(server, "http://test.opcualex.de");
     addHelloWorldMethod(server);
     addIncInt32ArrayMethod(server);
 
